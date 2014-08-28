@@ -12,15 +12,24 @@ codeindent = 2 -- spaces per indent
 codelinelength = 80 -- characters
 
 
-usage = 
-[[
+usage =
+  [[
+
+
 
 Usage: lua -f codeformat.lua ...options...
 
+
+
 Options are:
+
 --file <lua file>
+
 --ts <spaces>, tabsize: number of spaces in your tabs
+
 --in <spaces>, indent size: number of spaces for each indentation
+
+
 
 ]]
 
@@ -75,7 +84,7 @@ function indent(ln)
   end
   return ln
 end
-  
+
 function process(lines)
   for li=1,table.getn(lines) do
     local line=lines[li]
