@@ -29,14 +29,6 @@ end
 -- describe( 'A file approver',  function()
 --   describe('file verification', function()
 
---     it( 'fails when file sizes differ',  function ()
-
---         local actual = create_text_file('a.txt', 'hello')
---         local expected = create_text_file('e.txt', 'hello world')
-
---         local  message  =  fileapprover.verify_files( actual,  expected )
---         assert.equal( 'File sizes do not match:\r\n.\\spec\\e.txt(11)\r\n.\\spec\\a.txt(5)',  message )
---     end )
 
 --     it('fails when file contents differ', function ()
 --       local actual = create_text_file('ac.txt','12345')
@@ -83,6 +75,19 @@ describe('verification', function()
 
   end )
 
+  it( 'fails when file sizes differ',  function ()
+
+      -- local expected = create_text_file('e.txt', 'hello world')
+
+      -- local  message  =  fileapprover.verify_files( actual,  expected )
+      clean_up(namer, '.txt')
+      local actual = create_text_file_at(namer.expected_file('.txt'), 'hello world')
+      assert.has_error(
+        function() fileapprover.verify( writer, namer, reporter ) end,
+        'File sizes do not match:\r\nverification.expected.txt(11)\r\nverification.actual.txt(5)')
+  end )
+
+
   -- it('fails when file contents differ', function ()
   --   local actual = create_text_file('ac.txt','12345')
   --   local expected = create_text_file('ec.txt','54321')
@@ -92,7 +97,7 @@ describe('verification', function()
 
   it('passes when files are same', function ()
     --       local actual = create_text_file(namer.actual_file('.txt'),'12345')
-          local expected = create_text_file_at(namer.expected_file('.txt'),'12345')
+    local expected = create_text_file_at(namer.expected_file('.txt'),'12345')
 
     --       print('Verify same files...')
     assert.truthy( fileapprover.verify( writer, namer, reporter ), 'verified ok');
