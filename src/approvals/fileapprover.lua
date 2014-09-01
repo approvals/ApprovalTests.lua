@@ -1,4 +1,4 @@
-local path = require( 'pl.path' )
+local path = require 'pl.path'
 
 local approval_missing = 'Approved expectation does not exist: %s'
 local size_mismatch    = 'File sizes do not match:\r\n%s(%d)\r\n%s(%d)'
@@ -61,17 +61,13 @@ local function verify( writer, namer, reporter )
   if message ~= nil then
     reporter:report( actual_file, expected_file)
     error(message)
-    --   else
-    --     os.remove(actual_file)
+  else
+    os.remove(actual_file)
   end
 
-  --   return ok
   return true
 end
 
-
-
 return {
   verify = verify,
---   verify_files = verify_files
 }

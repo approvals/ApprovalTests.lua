@@ -88,21 +88,19 @@ describe('verification', function()
 
   it('launches reporter on failure', function()
     create_text_file_at(namer.expected_file('.txt'), 'Helol')
-    local status, err = pcall(function() 
-      fileapprover.verify(writer, namer, reporter) 
+    local status, err = pcall(function()
+      fileapprover.verify(writer, namer, reporter)
     end)
 
     assert.truthy(reporter:was_called())
   end)
 
-  --     it( 'Removes actual file on match', function ( )
-  --       local expected = namer.expected_file('.txt')
-  --       create_text_file_at( expected, 'Hello' )
+  it( 'Removes actual file on match', function ( )
+    writer.write(namer.expected_file('.txt'))
+    fileapprover.verify( writer, namer, reporter )
 
-  --       fileapprover.verify( writer, namer, reporter )
-
-  --       assert.falsy(path.exists(namer.actual_file('.txt')))
-  --     end)
+    assert.falsy(path.exists(namer.actual_file('.txt')))
+  end)
 
   --     it( 'Preserves approved file on match', function()
   --       local expected_file = namer.expected_file('.txt');
