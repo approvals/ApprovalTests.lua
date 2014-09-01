@@ -26,21 +26,6 @@ end
 --   return create_text_file_at(actual,contents)
 -- end
 
--- describe( 'A file approver',  function()
---   describe('file verification', function()
-
-
---     it('fails when file contents differ', function ()
---       local actual = create_text_file('ac.txt','12345')
---       local expected = create_text_file('ec.txt','54321')
-
---       local message = fileapprover.verify_files( actual, expected )
---       assert.equal( 'File contents do not match:\r\n.\\spec\\ec.txt(5)\r\n.\\spec\\ac.txt(5)', message);
---     end)
-
-
---   end)
-
 describe('verification', function()
   local namer = {
     actual_file = function ( extension )
@@ -67,44 +52,34 @@ describe('verification', function()
     end
   }
 
+  before_each(function()
+    clean_up(namer, '.txt')
+  end)
 
   it( 'fails on missing expected file',  function ()
-    clean_up(namer, '.txt')
     assert.has_error(function() fileapprover.verify( writer, namer, reporter ) end,
       'Approved expectation does not exist: verification.expected.txt')
-
   end )
 
   it( 'fails when file sizes differ',  function ()
-
-      -- local expected = create_text_file('e.txt', 'hello world')
-
-      -- local  message  =  fileapprover.verify_files( actual,  expected )
-      clean_up(namer, '.txt')
-      local actual = create_text_file_at(namer.expected_file('.txt'), 'hello world')
-      assert.has_error(
-        function() fileapprover.verify( writer, namer, reporter ) end,
-        'File sizes do not match:\r\nverification.expected.txt(11)\r\nverification.actual.txt(5)')
+    local expected = create_text_file_at(namer.expected_file('.txt'), 'hello world')
+    assert.has_error(
+      function() fileapprover.verify( writer, namer, reporter ) end,
+      'File sizes do not match:\r\nverification.expected.txt(11)\r\nverification.actual.txt(5)')
   end )
 
-
-  -- it('fails when file contents differ', function ()
-  --   local actual = create_text_file('ac.txt','12345')
-  --   local expected = create_text_file('ec.txt','54321')
-
-  -- assert.falsy(fileapprover.verify( writer, namer, reporter ));
-  -- end)
+  it('fails when file contents differ', function ()
+    local expected = create_text_file_at(namer.expected_file('.txt'),'54321')
+    assert.has_error(
+      function() fileapprover.verify(writer, namer, reporter) end,
+      'File contents do not match:\r\nverification.expected.txt(5)\r\nverification.actual.txt(5)');
+  end)
 
   it('passes when files are same', function ()
-    --       local actual = create_text_file(namer.actual_file('.txt'),'12345')
     local expected = create_text_file_at(namer.expected_file('.txt'),'12345')
 
-    --       print('Verify same files...')
     assert.truthy( fileapprover.verify( writer, namer, reporter ), 'verified ok');
-    --       print('they were the same')
     assert.falsy(reporter:was_called(), 'reporter not called')
-    --       os.remove(actual)
-    --       os.remove(expected)
   end)
 
   --     it('launches reporter on failure', function()
