@@ -1,7 +1,7 @@
 local path = require( 'pl.path' )
 
 local approval_missing = 'Approved expectation does not exist: %s'
-local size_mismatch = 'File sizes do not match:\r\n%s(%d)\r\n%s(%d)'
+local size_mismatch    = 'File sizes do not match:\r\n%s(%d)\r\n%s(%d)'
 local content_mismatch = 'File contents do not match:\r\n%s(%d)\r\n%s(%d)'
 
 local function read_all_binary( path )
@@ -58,10 +58,9 @@ local function verify( writer, namer, reporter )
 
   local message = verify_files(actual_file, expected_file)
 
-  --   local ok = not message
   if message ~= nil then
-    --     reporter:report( actual_file, expected_file)
-    error (message)
+    reporter:report( actual_file, expected_file)
+    error(message)
     --   else
     --     os.remove(actual_file)
   end

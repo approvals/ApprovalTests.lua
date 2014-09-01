@@ -40,6 +40,9 @@ describe('verification', function()
     report = function(self, ...)
       self.called = true
     end,
+    reset = function(self)
+      self.called = false
+    end,
     was_called = function(self)
       return self.called
     end
@@ -54,6 +57,7 @@ describe('verification', function()
 
   before_each(function()
     clean_up(namer, '.txt')
+    reporter:reset()
   end)
 
   it( 'fails on missing expected file',  function ()
@@ -82,13 +86,14 @@ describe('verification', function()
     assert.falsy(reporter:was_called(), 'reporter not called')
   end)
 
-  --     it('launches reporter on failure', function()
-  --       local expected = namer.expected_file('.txt');
-  --       create_text_file_at(expected, 'Helol')
+  it('launches reporter on failure', function()
+    create_text_file_at(namer.expected_file('.txt'), 'Helol')
+    local status, err = pcall(function() 
+      fileapprover.verify(writer, namer, reporter) 
+    end)
 
-  --       fileapprover.verify( writer, namer, reporter );
-  --       assert.truthy(reporter:was_called())
-  --     end)
+    assert.truthy(reporter:was_called())
+  end)
 
   --     it( 'Removes actual file on match', function ( )
   --       local expected = namer.expected_file('.txt')
