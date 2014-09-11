@@ -20,12 +20,6 @@ local function create_text_file_at( path, contents )
   return path
 end
 
-
--- local function create_text_file( name, contents )
---   local actual = utilities.adjacent_path(name)
---   return create_text_file_at(actual,contents)
--- end
-
 describe('verification', function()
   local namer = {
     actual_file = function ( extension )
@@ -102,13 +96,10 @@ describe('verification', function()
     assert.falsy(path.exists(namer.actual_file('.txt')))
   end)
 
-  --     it( 'Preserves approved file on match', function()
-  --       local expected_file = namer.expected_file('.txt');
-  --       create_text_file_at( expected_file, 'Hello' );
+  it( 'Preserves approved file on match', function()
+    writer.write(namer.expected_file('.txt'))
+    fileapprover.verify( writer, namer, reporter )
 
-  --       fileapprover.verify( writer, namer, reporter );
-
-  --       assert.truthy(path.exists(namer.expected_file('.txt')))
-  --     end)
-  --   end)
+    assert.truthy(path.exists(namer.expected_file('.txt')))
+  end)
 end)
