@@ -1,5 +1,5 @@
-ApprovalTests.lua
-=================
+# ApprovalTests.lua
+[![test](https://github.com/approvals/ApprovalTests.lua/actions/workflows/test.yml/badge.svg)](https://github.com/approvals/ApprovalTests.lua/actions/workflows/test.yml)
 
 Approvals for lua
 
